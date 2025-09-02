@@ -10,7 +10,7 @@ resource "huaweicloud_cce_node_pool" "main" {
   min_node_count           = var.main_scaling_config.min
   max_node_count           = var.main_scaling_config.max
   scale_down_cooldown_time = var.main_scaling_config.cooldown
-  scall_enable             = var.autoscaling_enabled
+  scall_enable             = var.auto_scaler_profile.autoscaling_enabled
 
   root_volume {
     size       = var.root_disk_size
@@ -33,6 +33,10 @@ resource "huaweicloud_cce_node_pool" "main" {
     max_pods    = var.main_max_pods
   }
 
+  lifecycle {
+    ignore_changes = [ initial_node_count ]
+  }
+
   tags = local.all_tags
 }
 
@@ -49,7 +53,7 @@ resource "huaweicloud_cce_node_pool" "extra" {
   min_node_count           = var.extra_scaling_config.min
   max_node_count           = var.extra_scaling_config.max
   scale_down_cooldown_time = var.extra_scaling_config.cooldown
-  scall_enable             = var.autoscaling_enabled
+  scall_enable             = var.auto_scaler_profile.autoscaling_enabled
 
   root_volume {
     size       = var.root_disk_size
@@ -70,6 +74,10 @@ resource "huaweicloud_cce_node_pool" "extra" {
   extend_params {
     agency_name = huaweicloud_identity_agency.node.name
     max_pods    = var.extra_max_pods
+  }
+
+  lifecycle {
+    ignore_changes = [ initial_node_count ]
   }
 
   tags = local.all_tags

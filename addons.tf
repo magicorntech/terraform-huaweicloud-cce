@@ -1,9 +1,9 @@
 # Get current project/tenant information
 resource "huaweicloud_cce_addon" "autoscaler" {
-  count         = var.autoscaling_enabled ? 1 : 0
+  count         = var.auto_scaler_profile.autoscaling_enabled ? 1 : 0
   cluster_id    = huaweicloud_cce_cluster.main.id
   template_name = "autoscaler"
-  version       = var.autoscaler_version
+  version       = var.auto_scaler_profile.autoscaler_version
 
   values {
     #basic_json = jsonencode(jsondecode(data.huaweicloud_cce_addon_template.autoscaler[0].spec).basic)
@@ -17,8 +17,11 @@ resource "huaweicloud_cce_addon" "autoscaler" {
     custom_json = jsonencode(merge(
       jsondecode(data.huaweicloud_cce_addon_template.autoscaler[0].spec).parameters.custom,
       {
-        cluster_id = huaweicloud_cce_cluster.main.id
-        tenant_id  = data.huaweicloud_identity_projects.current.projects[0].id
+        cluster_id                    = huaweicloud_cce_cluster.main.id
+        tenant_id                     = data.huaweicloud_identity_projects.current.projects[0].id
+        scaleDownEnabled              = true
+        scaleDownUtilizationThreshold = var.auto_scaler_profile.scale_down_utilization_threshold
+        expander                      = var.auto_scaler_profile.expander
       }
     ))
     #flavor_json = jsonencode(jsondecode(data.huaweicloud_cce_addon_template.autoscaler[0].spec).parameters.flavor1)

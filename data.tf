@@ -7,10 +7,10 @@ data "huaweicloud_elb_flavors" "main" {
 }
 
 data "huaweicloud_cce_addon_template" "autoscaler" {
-  count      = var.autoscaling_enabled ? 1 : 0
+  count      = var.auto_scaler_profile.autoscaling_enabled ? 1 : 0
   cluster_id = huaweicloud_cce_cluster.main.id
   name       = "autoscaler"
-  version    = var.autoscaler_version
+  version    = var.auto_scaler_profile.autoscaler_version
 }
 
 data "huaweicloud_cce_addon_template" "metrics_server" {

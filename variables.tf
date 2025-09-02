@@ -15,9 +15,8 @@ variable "cluster_version" {}
 variable "cluster_flavor" {}
 variable "load_balancer_enabled" {}
 variable "load_balancer_bandwidth" {}
-variable "autoscaling_enabled" {}
-variable "autoscaler_version" {}
 variable "metrics_server_version" {}
+variable "auto_scaler_profile" {}
 variable "root_disk_size" {}
 variable "root_disk_type" {}
 variable "root_disk_iops" {}

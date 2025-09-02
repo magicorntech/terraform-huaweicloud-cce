@@ -5,7 +5,7 @@ Magicorn made Terraform Module for Huawei Cloud Provider
 ```
 module "cce" {
   source         = "magicorntech/cce/huaweicloud"
-  version        = "0.0.1"
+  version        = "0.0.2"
   tenant         = var.tenant
   name           = var.name
   environment    = var.environment
@@ -25,9 +25,15 @@ module "cce" {
   cluster_flavor          = "cce.s2.small"
   load_balancer_enabled   = true
   load_balancer_bandwidth = 300
-  autoscaling_enabled     = true
-  autoscaler_version      = "1.30.51"
   metrics_server_version  = "1.3.68"
+
+  # Auto Scaler Configuration
+  auto_scaler_profile = {
+    autoscaling_enabled              = true
+    autoscaler_version               = "1.30.51"
+    expander                         = "least-waste"
+    scale_down_utilization_threshold = 0.65
+  }
 
   # Node Configuration
   main_instance_types = "c7n.large.4"
